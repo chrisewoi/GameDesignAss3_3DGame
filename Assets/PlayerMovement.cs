@@ -13,7 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public float decelRate;
     public float minForwardSpeed;
     public float maxForwardSpeed;
-    //public float bankAmount;
+    
+    public float bankAmount;
+    private float bankV;
+    public float bankSmoothTime;
+    public float currentBank;
     
     public ObservedVector3 PlayerDirection;
     public ObservedTransform PlayerTransform;
@@ -40,9 +44,12 @@ public class PlayerMovement : MonoBehaviour
         moveInput.y = Input.GetAxis("Vertical") * Time.deltaTime*turnSpeed*invertControlMultiplier;
         //transform.position += speed * Time.deltaTime * move;
         transform.forward = transform.forward + transform.right * moveInput.x + transform.up * moveInput.y;
-        PlayerDirection.SetReference(transform.forward);
+        transform.Rotate(0, 0, GetSmoothBankAngle());
+        //PlayerDirection.SetReference(transform.forward);
         transform.position += transform.forward * forwardSpeed * Time.deltaTime;
-        
+        transform.Rotate(new Vector3(0f,0f,GetSmoothBankAngle()));
+        PlayerTransform.SetReference(transform);
+
         
         //Ship speed controls
         if (Input.GetButton("Accelerate")) forwardSpeed += accelRate * Time.deltaTime;
@@ -59,6 +66,18 @@ public class PlayerMovement : MonoBehaviour
     public float GetForwardSpeed()
     {
         return forwardSpeed;
+    }
+    public float GetSmoothBankAngle()
+    {
+        currentBank = transform.rotation.z;
+        float bankLerp = Mathf.Lerp(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
+        Debug.Log("FUCK YOU: " + bankLerp);
+        Debug.Log(("bankAmount: " + bankAmount));
+        float smoothBankLerp = Mathf.SmoothDamp(currentBank, bankLerp, ref bankV, bankSmoothTime);
+        float zRotate = bankLerp;
+        Debug.Log("zRotate: " + zRotate);
+        Debug.Log("currentBank: " + currentBank);
+        return zRotate;
     }
 }
 

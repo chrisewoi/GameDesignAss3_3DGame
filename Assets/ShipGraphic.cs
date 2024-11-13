@@ -11,11 +11,7 @@ public class ShipGraphic : MonoBehaviour
     public ObservedTransform ShipTransform;
     public float smoothTime;
     private Vector3 v;
-    private float bankV;
-    public float bankSmoothTime;
-    public float currentBank;
-    
-    public float bankAmount;
+
     public PlayerMovement playerMovement;
     public Vector2 moveInput;
 
@@ -31,11 +27,14 @@ public class ShipGraphic : MonoBehaviour
     {
         ObservedPlayerDirection.Register(PlayerDirection_OnSetReference);
         ShipTransform.Register(ShipTransform_OnSetReference);
+        ObservedPlayerTransform.Register(ObservedPlayerTransform_OnSetReference);
     }
     private void OnDisable()
     {
         ObservedPlayerDirection.Unregister(PlayerDirection_OnSetReference);
         ShipTransform.Unregister(ShipTransform_OnSetReference);
+        ObservedPlayerTransform.Unregister(ObservedPlayerTransform_OnSetReference);
+
     }
 
     private void Update()
@@ -52,25 +51,29 @@ public class ShipGraphic : MonoBehaviour
 
     public void PlayerDirection_OnSetReference(Vector3 previousReference, Vector3 newReference)
     {
-        currentBank = transform.eulerAngles.z;
+        //currentBank = transform.eulerAngles.z;
         transform.forward = Vector3.SmoothDamp(transform.forward, newReference, ref v, smoothTime / playerMovement.GetForwardSpeed());
         Debug.Log("smoothTimeMod: " + smoothTime / playerMovement.GetForwardSpeed());
         
         //float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
-        float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
-        float smoothBankLerp = Mathf.SmoothDamp(currentBank, bankLerp, ref bankV, bankSmoothTime * Time.deltaTime);
-        float zRotate = -smoothBankLerp;
-        transform.Rotate(0f, 0f, zRotate);
-        Debug.Log("zRotate: " + zRotate);
+        //transform.Rotate(0f, 0f, zRotate);
+        //Debug.Log("zRotate: " + zRotate);*/
     }
 
     public void ShipTransform_OnSetReference(Transform previousReference, Transform newReference)
     {
 
+    }
+
+    public void ObservedPlayerTransform_OnSetReference(Transform previousReference, Transform newReference)
+    {
+        transform.forward = Vector3.SmoothDamp(transform.forward, newReference.transform.forward, ref v, smoothTime / playerMovement.GetForwardSpeed());
+        transform.Rotate(0,0,newReference.transform.eulerAngles.z);
+        
 
         //transform.Rotate(transform.forward * moveInput.x * bankAmount, Space.Self);
         //transform.forward = Vector3.SmoothDamp(transform.forward, )
     }
-    
-    
+
+
 }
