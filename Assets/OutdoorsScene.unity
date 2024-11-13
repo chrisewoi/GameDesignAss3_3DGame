@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2301.6877, g: 2521.26, b: 3875.2505, a: 1}
+  m_IndirectSpecularColor: {r: 2261.4397, g: 2403.094, b: 3500.9263, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -375,9 +375,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObservedPlayerDirection: {fileID: 11400000, guid: c80d421f461efda488ab499ec3e1ebc2,
     type: 2}
+  ObservedPlayerTransform: {fileID: 11400000, guid: 536297325636e21409a7c6d4a22f9b87,
+    type: 2}
   ShipTransform: {fileID: 11400000, guid: 977e39d46a94a3547bebc9a0db5e8d91, type: 2}
   smoothTime: 1
-  bankAmount: 50
+  bankSmoothTime: 1
+  currentBank: 0
+  bankAmount: 30
+  playerMovement: {fileID: 1377456365}
   moveInput: {x: 0, y: 0}
 --- !u!65 &270280466
 BoxCollider:
@@ -635,7 +640,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!114 &1377456365
 MonoBehaviour:
@@ -649,8 +654,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ef61f2089ad5c4b802355079729c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  forwardSpeed: 1
+  turnSpeed: 1
+  forwardSpeed: 0
+  accelRate: 2
+  decelRate: 4
+  minForwardSpeed: 1
+  maxForwardSpeed: 20
   PlayerDirection: {fileID: 11400000, guid: c80d421f461efda488ab499ec3e1ebc2, type: 2}
   PlayerTransform: {fileID: 11400000, guid: 536297325636e21409a7c6d4a22f9b87, type: 2}
   invertControls: 1
@@ -907,7 +916,7 @@ MonoBehaviour:
   ObservedShipTransform: {fileID: 11400000, guid: 977e39d46a94a3547bebc9a0db5e8d91,
     type: 2}
   smoothTime: 1
-  cameraOffset: {x: 0, y: 0, z: -8}
+  cameraOffset: {x: 0, y: 4, z: -10}
   finalOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &2013410473
 GameObject:

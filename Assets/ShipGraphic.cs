@@ -7,12 +7,16 @@ using UnityEngine.UIElements;
 public class ShipGraphic : MonoBehaviour
 {
     public ObservedVector3 ObservedPlayerDirection;
+    public ObservedTransform ObservedPlayerTransform;
     public ObservedTransform ShipTransform;
     public float smoothTime;
     private Vector3 v;
+    private float bankV;
+    public float bankSmoothTime;
+    public float currentBank;
     
     public float bankAmount;
-    private PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
     public Vector2 moveInput;
 
 
@@ -20,7 +24,7 @@ public class ShipGraphic : MonoBehaviour
     private void Awake()
     {
         ShipTransform.SetReference(transform);
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        //playerMovement = FindObjectOfType<PlayerMovement>();
 
     }
     private void OnEnable()
@@ -37,17 +41,27 @@ public class ShipGraphic : MonoBehaviour
     private void Update()
     {
         Transform ship = ShipTransform.GetReference();
+        Transform player = ObservedPlayerTransform.GetReference();
         moveInput.x = Input.GetAxis("Horizontal");
-        float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
-        Debug.Log($"bank: {bankLerp}");
-        transform.Rotate(0f, 0f, bankLerp);
+        
+        
+        transform.position = player.transform.position;
         ship = transform;
         ShipTransform.SetReference(transform);
     }
 
     public void PlayerDirection_OnSetReference(Vector3 previousReference, Vector3 newReference)
     {
-        transform.forward = Vector3.SmoothDamp(transform.forward, newReference, ref v, smoothTime);
+        currentBank = transform.eulerAngles.z;
+        transform.forward = Vector3.SmoothDamp(transform.forward, newReference, ref v, smoothTime / playerMovement.GetForwardSpeed());
+        Debug.Log("smoothTimeMod: " + smoothTime / playerMovement.GetForwardSpeed());
+        
+        //float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
+        float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
+        float smoothBankLerp = Mathf.SmoothDamp(currentBank, bankLerp, ref bankV, bankSmoothTime * Time.deltaTime);
+        float zRotate = -smoothBankLerp;
+        transform.Rotate(0f, 0f, zRotate);
+        Debug.Log("zRotate: " + zRotate);
     }
 
     public void ShipTransform_OnSetReference(Transform previousReference, Transform newReference)
