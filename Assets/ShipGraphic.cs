@@ -52,8 +52,8 @@ public class ShipGraphic : MonoBehaviour
     public void PlayerDirection_OnSetReference(Vector3 previousReference, Vector3 newReference)
     {
         //currentBank = transform.eulerAngles.z;
-        transform.forward = Vector3.SmoothDamp(transform.forward, newReference, ref v, smoothTime / playerMovement.GetForwardSpeed());
-        Debug.Log("smoothTimeMod: " + smoothTime / playerMovement.GetForwardSpeed());
+        //transform.forward = Vector3.SmoothDamp(transform.forward, newReference, ref v, smoothTime / playerMovement.GetForwardSpeed());
+        //Debug.Log("smoothTimeMod: " + smoothTime / playerMovement.GetForwardSpeed());
         
         //float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
         //transform.Rotate(0f, 0f, zRotate);
@@ -67,8 +67,8 @@ public class ShipGraphic : MonoBehaviour
 
     public void ObservedPlayerTransform_OnSetReference(Transform previousReference, Transform newReference)
     {
-        transform.forward = Vector3.SmoothDamp(transform.forward, newReference.transform.forward, ref v, smoothTime / playerMovement.GetForwardSpeed());
-        transform.Rotate(0,0,newReference.transform.eulerAngles.z);
+        //transform.forward = Vector3.SmoothDamp(transform.forward, newReference.transform.forward, ref v, smoothTime / playerMovement.GetForwardSpeed());
+        //transform.Rotate(0,0,newReference.transform.eulerAngles.z);
         
 
         //transform.Rotate(transform.forward * moveInput.x * bankAmount, Space.Self);
