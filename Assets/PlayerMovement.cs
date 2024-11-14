@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -49,5 +53,35 @@ public class PlayerMovement : MonoBehaviour
         Quaternion rollRot = Quaternion.AngleAxis(rollCurve.Evaluate(rollTime)*rollAmplitude, Vector3.forward);
         rotationTarget.localRotation = yawRot * pitchRot * rollRot;
     }
+
+    /*public List<Depression> emptyWillToLive = new ();
+    public List<List<Depression>> nestedEmptyWillToLive = new();
+
+    public void DestroyDepression()
+    { 
+        Depression depression = FindObjectOfType<Depression>();
+        if (depression == null)
+        {
+            foreach (var emptyWillToLiveInstance in nestedEmptyWillToLive)
+            {
+                foreach (var depressionMaybe in emptyWillToLiveInstance)
+                {
+                    depression = FindObjectOfType<Depression>();
+                    Destroy(depression);
+                }
+            }
+        }
+        else
+        {
+            Destroy(depression);
+        }
+        throw new ArgumentException("No depression present.. but still depress");
+    }
+}
+
+public class Depression : MonoBehaviour
+{*/
+
+
 }
 
