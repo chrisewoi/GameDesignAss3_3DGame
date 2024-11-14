@@ -38,16 +38,17 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        moveInput.x = Input.GetAxis("Horizontal")*Time.deltaTime*turnSpeed;
+        moveInput.x = Input.GetAxis("Horizontal")*turnSpeed;
         //float bankLerp = Mathf.LerpAngle(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
         float invertControlMultiplier = invertControls ? -1 : 1;
-        moveInput.y = Input.GetAxis("Vertical") * Time.deltaTime*turnSpeed*invertControlMultiplier;
+        moveInput.y = Input.GetAxis("Vertical")*turnSpeed*invertControlMultiplier;
         //transform.position += speed * Time.deltaTime * move;
         transform.forward = transform.forward + transform.right * moveInput.x + transform.up * moveInput.y;
-        transform.Rotate(0, 0, GetSmoothBankAngle());
+        //transform.Rotate(transform.forward, GetSmoothBankAngle());
+        //transform.Rotate(0, 0, GetSmoothBankAngle());
         //PlayerDirection.SetReference(transform.forward);
         transform.position += transform.forward * forwardSpeed * Time.deltaTime;
-        transform.Rotate(new Vector3(0f,0f,GetSmoothBankAngle()));
+        transform.localEulerAngles = new(transform.localEulerAngles.x, transform.localEulerAngles.y, GetSmoothBankAngle());//Rotate(new Vector3(0f,0f,GetSmoothBankAngle()));
         PlayerTransform.SetReference(transform);
 
         
@@ -69,11 +70,13 @@ public class PlayerMovement : MonoBehaviour
     }
     public float GetSmoothBankAngle()
     {
-        currentBank = transform.rotation.z;
-        float bankLerp = Mathf.Lerp(-bankAmount, bankAmount, (moveInput.x + 1) / 2);
+        currentBank = transform.localEulerAngles.z;//transform.rotation.z;
+        float alpha = moveInput.x;
+        
+        float bankLerp = Mathf.LerpAngle(bankAmount, -bankAmount, (moveInput.x + 1f) / 2f);
         Debug.Log("FUCK YOU: " + bankLerp);
         Debug.Log(("bankAmount: " + bankAmount));
-        float smoothBankLerp = Mathf.SmoothDamp(currentBank, bankLerp, ref bankV, bankSmoothTime);
+        float smoothBankLerp = Mathf.SmoothDamp(currentBank, bankLerp, ref bankV, bankSmoothTime);  
         float zRotate = bankLerp;
         Debug.Log("zRotate: " + zRotate);
         Debug.Log("currentBank: " + currentBank);
