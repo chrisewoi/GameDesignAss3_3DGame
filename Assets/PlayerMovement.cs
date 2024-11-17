@@ -22,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
     private float roll_v;
     public float rollSmoothTime;
     public float rollAmplitude;
+
+    public float forwardSpeed;
+    public float accelRate;
+    public float decelRate;
+    public float minForwardSpeed;
+    public float maxForwardSpeed;
     private void Awake()
     {
         PlayerDirection.SetReference(transform.forward);
@@ -42,6 +48,21 @@ public class PlayerMovement : MonoBehaviour
         rollTime = Mathf.Clamp(rollTime, -1f,1f);
         
         RotationHandler();
+
+        if (Input.GetButton("Accelerate"))
+        {
+            forwardSpeed += accelRate * Time.deltaTime;
+        }
+        if(Input.GetButton("Decelerate"))
+        {
+            forwardSpeed -= decelRate * Time.deltaTime;
+        }
+
+        forwardSpeed = Mathf.Clamp(forwardSpeed, minForwardSpeed, maxForwardSpeed);
+        transform.position += forwardSpeed * Time.deltaTime * rotationTarget.transform.forward;
+        rotationTarget.position = transform.position;
+        PlayerTransform.SetReference(transform);
+        
     }
 
     void RotationHandler()
