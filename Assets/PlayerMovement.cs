@@ -39,9 +39,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        moveInput.x = Input.GetAxis("Horizontal")*turnSpeed;
+        moveInput.x = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
         float invertControlMultiplier = invertControls ? -1 : 1;
-        moveInput.y = Input.GetAxis("Vertical")*turnSpeed*invertControlMultiplier;
+        moveInput.y = Input.GetAxis("Vertical") * turnSpeed * Time.deltaTime * invertControlMultiplier;
 
         rollTime = Mathf.SmoothDamp(rollTime, moveInput.x, ref roll_v, rollSmoothTime);
 
@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         angles.y = Mathf.Clamp(angles.y, pitchLimits.x, pitchLimits.y);
         Quaternion yawRot = Quaternion.AngleAxis(angles.x, Vector3.up);
         Quaternion pitchRot = Quaternion.AngleAxis(angles.y, Vector3.right);
-        Quaternion rollRot = Quaternion.AngleAxis(rollCurve.Evaluate(rollTime)*rollAmplitude, Vector3.forward);
+        Quaternion rollRot = Quaternion.AngleAxis(rollCurve.Evaluate(rollTime)*rollAmplitude, Vector3.forward); 
         rotationTarget.localRotation = yawRot * pitchRot * rollRot;
     }
 
