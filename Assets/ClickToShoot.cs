@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Damage;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,7 @@ public class ClickToShoot : MonoBehaviour
 
     public GameObject PS_LaserHit;
     public float laserForce;
+    public float laserDamage;
 
 
 
@@ -60,6 +62,10 @@ public class ClickToShoot : MonoBehaviour
                     //hit.rigidbody.AddExplosionForce(laserForce, hit.point, laserForce);
                   
                     hit.rigidbody.AddForceAtPosition(ray.direction, hit.point,ForceMode.Impulse);
+                    if (hit.rigidbody.TryGetComponent<Damageable>(out Damageable damageable))
+                    {
+                        damageable.TakeDamage(laserDamage);
+                    }
                    // hit.rigidbody.AddTorque(hit.normal, ForceMode.Impulse);
                 }
             }

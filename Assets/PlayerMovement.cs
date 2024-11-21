@@ -75,6 +75,11 @@ public class PlayerMovement : MonoBehaviour
         rotationTarget.localRotation = yawRot * pitchRot * rollRot;
     }
 
+    public float GetSpeed()
+    {
+        return forwardSpeed;
+    }
+
     /*public List<Depression> emptyWillToLive = new ();
     public List<List<Depression>> nestedEmptyWillToLive = new();
 
