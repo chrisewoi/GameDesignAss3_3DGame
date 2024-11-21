@@ -13,6 +13,7 @@ public class ClickToShoot : MonoBehaviour
     public bool nextLaserGun;
 
     public GameObject PS_LaserHit;
+    public float laserForce;
 
 
 
@@ -41,9 +42,10 @@ public class ClickToShoot : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("clicked");
+            Ray ray;
             // TryToHit() comes from our parent script (RaycastFromScreenCentre)
             // If we hit something, hit.collider will have a value. Else, hit.collider will be null
-            RaycastHit hit = TryToHit();
+            RaycastHit hit = TryToHit(out ray);
         
             // If we did hit something...
             if (hit.collider)
@@ -54,6 +56,11 @@ public class ClickToShoot : MonoBehaviour
                 if (hit.rigidbody)
                 {
                     //agent.TakeDamage(damageSource.GetDamage());
+                    //hit.rigidbody.AddForce(hit.transform.forward * laserForce, ForceMode.Impulse);
+                    //hit.rigidbody.AddExplosionForce(laserForce, hit.point, laserForce);
+                  
+                    hit.rigidbody.AddForceAtPosition(ray.direction, hit.point,ForceMode.Impulse);
+                   // hit.rigidbody.AddTorque(hit.normal, ForceMode.Impulse);
                 }
             }
             Play(hit.point);
@@ -82,21 +89,23 @@ public class ClickToShoot : MonoBehaviour
         line.enabled = false;
     }
 
-    public RaycastHit TryToHit()
+    public RaycastHit TryToHit(out Ray outRay)
     {
         // a struct cannot be "null", so we initialise an empty struct instead
         RaycastHit hit = new RaycastHit();
 
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition); //camera.ScreenPointToRay(new Vector3(camera.pixelWidth, camera.pixelHeight) * 0.5f);
+        Ray ray = camera.ScreenPointToRay(Input
+            .mousePosition); //camera.ScreenPointToRay(new Vector3(camera.pixelWidth, camera.pixelHeight) * 0.5f);
+        outRay = ray;
 
         if (Physics.Raycast(ray, out hit, maxDistance, hitLayer))
         {
             return hit;
         }
-        
+
         // If we hit nothing, record the furthest point we *could* have hit
         hit.point = ray.origin + ray.direction * maxDistance;
-        
+
         // then we can return the otherwise empty hit
         return hit;
     }
