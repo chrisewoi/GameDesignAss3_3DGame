@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
@@ -21,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public AnimationCurve rollCurve;
     private float roll_v;
     public float rollSmoothTime;
+    public float rollResetTime;
     public float rollAmplitude;
 
     public float forwardSpeed;
@@ -39,11 +39,16 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        moveInput.x = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+        moveInput.x = Input.GetAxis("Horizontal") * turnSpeed;
         float invertControlMultiplier = invertControls ? -1 : 1;
-        moveInput.y = Input.GetAxis("Vertical") * turnSpeed * Time.deltaTime * invertControlMultiplier;
+        moveInput.y = Input.GetAxis("Vertical") * turnSpeed * invertControlMultiplier;
 
-        rollTime = Mathf.SmoothDamp(rollTime, moveInput.x, ref roll_v, rollSmoothTime);
+        float moddedRollSmoothTime = rollSmoothTime;
+        if (!Input.GetButton("Horizontal"))
+        {
+            moddedRollSmoothTime = rollResetTime;
+        }
+        rollTime = Mathf.SmoothDamp(rollTime, Input.GetAxis("Horizontal"), ref roll_v, moddedRollSmoothTime);
 
         rollTime = Mathf.Clamp(rollTime, -1f,1f);
         
@@ -71,7 +76,8 @@ public class PlayerMovement : MonoBehaviour
         angles.y = Mathf.Clamp(angles.y, pitchLimits.x, pitchLimits.y);
         Quaternion yawRot = Quaternion.AngleAxis(angles.x, Vector3.up);
         Quaternion pitchRot = Quaternion.AngleAxis(angles.y, Vector3.right);
-        Quaternion rollRot = Quaternion.AngleAxis(rollCurve.Evaluate(rollTime)*rollAmplitude, Vector3.forward); 
+        Quaternion rollRot = Quaternion.AngleAxis(-rollTime*rollAmplitude, Vector3.forward);
+        //Quaternion rollRot = Quaternion.AngleAxis(rollCurve.Evaluate(rollTime)*rollAmplitude, Vector3.forward); 
         rotationTarget.localRotation = yawRot * pitchRot * rollRot;
     }
 
