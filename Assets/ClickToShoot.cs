@@ -27,14 +27,13 @@ public class ClickToShoot : MonoBehaviour
     [Tooltip("The maximum distance this raycast can travel")] [SerializeField]
     private float maxDistance;
 
-    // Hold a reference to our camera selectr so we know which camera is in use
-    private Camera camera;
+    [SerializeField] public Camera camera;
     
     // protected = like private, but child scripts can see
     // virtual = lets a child script override this function with its own version
     void Start()
     {
-        camera = FindObjectOfType<Camera>();
+        //camera = FindObjectOfType<Camera>();
         line = GetComponentInChildren<LineRenderer>();
         line.enabled = false;
     }
@@ -61,7 +60,7 @@ public class ClickToShoot : MonoBehaviour
                     //hit.rigidbody.AddForce(hit.transform.forward * laserForce, ForceMode.Impulse);
                     //hit.rigidbody.AddExplosionForce(laserForce, hit.point, laserForce);
                   
-                    hit.rigidbody.AddForceAtPosition(ray.direction, hit.point,ForceMode.Impulse);
+                    hit.rigidbody.AddForceAtPosition(ray.direction * laserForce, hit.point,ForceMode.Impulse);
                     if (hit.rigidbody.TryGetComponent<Damageable>(out Damageable damageable))
                     {
                         damageable.TakeDamage(laserDamage);

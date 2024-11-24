@@ -7,6 +7,8 @@ using UnityEngine;
 public class DestroyOnCollision : MonoBehaviour
 {
     public GameObject Ship;
+    public GameObject PS_Destroy;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,7 @@ public class DestroyOnCollision : MonoBehaviour
 
     void OnCollisionEnter()
     {
+        GameObject ps = Instantiate(PS_Destroy, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 

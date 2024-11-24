@@ -28,6 +28,14 @@ public class PlayerMovement : MonoBehaviour
     public float decelRate;
     public float minForwardSpeed;
     public float maxForwardSpeed;
+    // the speed of the ship between 0-1 relative to its min and max speed
+    public float minMaxSpeed => Mathf.InverseLerp(minForwardSpeed, maxForwardSpeed, forwardSpeed);
+
+    public ParticleSystem[] thrusters;
+    public float minThrusterParticles;
+    public float maxThrusterParticles;
+    private float particleLifetime;
+    
     private void Awake()
     {
         PlayerDirection.SetReference(transform.forward);
@@ -36,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         mainCamera = GetComponent<Camera>();
+        particleLifetime = thrusters[0].main.startLifetime.constant;
     }
     void Update()
     {
@@ -68,6 +77,22 @@ public class PlayerMovement : MonoBehaviour
         rotationTarget.position = transform.position;
         PlayerTransform.SetReference(transform);
         
+        ThrusterRate();
+    }
+
+    private void ThrusterRate()
+    {
+        // Particle thruster amount based on speed;
+        foreach (ParticleSystem thruster in thrusters)
+        {
+            // Use the minMaxSpeed lerp to calculate the relative particle value between its own min and max
+            float rate = Mathf.Lerp(minThrusterParticles, maxThrusterParticles, minMaxSpeed);
+            var emission = thruster.emission;
+            emission.rateOverTime = rate;
+
+            var main = thruster.main;
+            main.startLifetime = Mathf.Clamp(particleLifetime * minMaxSpeed, particleLifetime / 1.5f, particleLifetime);
+        }
     }
 
     void RotationHandler()
