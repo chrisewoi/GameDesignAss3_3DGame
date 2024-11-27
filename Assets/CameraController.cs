@@ -16,9 +16,12 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        finalOffset = cameraOffset;
-        finalOffset = ship.right * cameraOffset.x + ship.up * cameraOffset.y + ship.forward * cameraOffset.z;
-        transform.position = Vector3.SmoothDamp(transform.position, ship.position + finalOffset, ref v_pos, smoothTime);
-        transform.forward = Vector3.SmoothDamp(transform.forward, ship.forward, ref v_forward, smoothTime);
+        if (ship != null)
+        {
+            finalOffset = cameraOffset;
+            finalOffset = ship.right * cameraOffset.x + ship.up * cameraOffset.y + ship.forward * cameraOffset.z;
+            transform.position = Vector3.SmoothDamp(transform.position, ship.position + finalOffset, ref v_pos, smoothTime);
+            transform.forward = Vector3.SmoothDamp(transform.forward, ship.forward, ref v_forward, smoothTime);
+        }
     }
 }

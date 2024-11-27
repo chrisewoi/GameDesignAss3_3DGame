@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerDirection.SetReference(transform.forward);
         PlayerTransform.SetReference(rotationTarget);
+        Application.targetFrameRate = 120;
     }
     void Start()
     {
@@ -97,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
 
     void RotationHandler()
     {
-        angles += moveInput;
+        angles += moveInput * Time.deltaTime;
         angles.y = Mathf.Clamp(angles.y, pitchLimits.x, pitchLimits.y);
         Quaternion yawRot = Quaternion.AngleAxis(angles.x, Vector3.up);
         Quaternion pitchRot = Quaternion.AngleAxis(angles.y, Vector3.right);

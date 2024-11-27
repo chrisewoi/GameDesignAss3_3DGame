@@ -8,14 +8,20 @@ using UnityEngine.Events;
 public class ClickToShoot : MonoBehaviour
 {
     public LineRenderer line;
+    public LineRenderer upgradedLine;
     public UnityEvent click;
     public Transform LaserGun1;
     public Transform LaserGun2;
+    public Transform UpgradedLaserGun;
     public bool nextLaserGun;
 
     public GameObject PS_LaserHit;
     public float laserForce;
     public float laserDamage;
+
+    public bool upgraded;
+    public float powerupCooldown;
+    public float powerupActive;
 
 
 
@@ -36,13 +42,14 @@ public class ClickToShoot : MonoBehaviour
         //camera = FindObjectOfType<Camera>();
         line = GetComponentInChildren<LineRenderer>();
         line.enabled = false;
+        upgradedLine.enabled = false;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Debug.Log("clicked");
+            //Debug.Log("clicked");
             Ray ray;
             // TryToHit() comes from our parent script (RaycastFromScreenCentre)
             // If we hit something, hit.collider will have a value. Else, hit.collider will be null
@@ -51,25 +58,41 @@ public class ClickToShoot : MonoBehaviour
             // If we did hit something...
             if (hit.collider)
             {
-                GameObject test = Instantiate(PS_LaserHit);
-                test.transform.position = hit.point;
-                test.transform.forward = hit.normal;
+                if (hit.collider.CompareTag("ship")) return;
+                GameObject laserHit = Instantiate(PS_LaserHit);
+                laserHit.transform.position = hit.point;
+                laserHit.transform.forward = hit.normal;
+                
                 if (hit.rigidbody)
                 {
                     //agent.TakeDamage(damageSource.GetDamage());
                     //hit.rigidbody.AddForce(hit.transform.forward * laserForce, ForceMode.Impulse);
                     //hit.rigidbody.AddExplosionForce(laserForce, hit.point, laserForce);
-                  
-                    hit.rigidbody.AddForceAtPosition(ray.direction * laserForce, hit.point,ForceMode.Impulse);
+
+                    float powerupForceMulti = 1f;
+                    if (powerupActive > 0) powerupForceMulti = 10f;
+                    hit.rigidbody.AddForceAtPosition(ray.direction * (laserForce * powerupForceMulti), hit.point,ForceMode.Impulse);
                     if (hit.rigidbody.TryGetComponent<Damageable>(out Damageable damageable))
                     {
-                        damageable.TakeDamage(laserDamage);
-                    }
-                   // hit.rigidbody.AddTorque(hit.normal, ForceMode.Impulse);
+                        float powerupDmgMulti = 1f;
+                        if (powerupActive > 0) powerupDmgMulti = 10f;
+                        damageable.TakeDamage(laserDamage * powerupDmgMulti);
+                    } 
+                    // hit.rigidbody.AddTorque(hit.normal, ForceMode.Impulse);
                 }
             }
             Play(hit.point);
         }
+        
+        // if a powerup has been picked up, set the cooldown
+        if (upgraded)
+        {
+            upgraded = false;
+            powerupActive = powerupCooldown;
+        }
+
+        powerupActive -= Time.deltaTime;
+        powerupActive = Mathf.Clamp(powerupActive, 0, powerupCooldown);
     }
 
     public Vector3 GetNextLaserGunPos()
@@ -83,15 +106,24 @@ public class ClickToShoot : MonoBehaviour
     {
         //StopCoroutine("StopAfterDelay");
         line.enabled = true;
+        if (powerupActive > 0)
+        {
+            line.enabled = false;
+            upgradedLine.enabled = true;
+            upgradedLine.SetPosition(0, transform.InverseTransformPoint((UpgradedLaserGun.position)));
+            upgradedLine.SetPosition(1, transform.InverseTransformPoint(hitPosition));
+        }
         line.SetPosition(0, transform.InverseTransformPoint(GetNextLaserGunPos()));
         line.SetPosition(1, transform.InverseTransformPoint(hitPosition));
+       
         StartCoroutine("StopAfterDelay");
     }
 
     private IEnumerator StopAfterDelay()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f + (powerupActive > 0f ? 0.1f : 0));
         line.enabled = false;
+        upgradedLine.enabled = false;
     }
 
     public RaycastHit TryToHit(out Ray outRay)
@@ -114,4 +146,13 @@ public class ClickToShoot : MonoBehaviour
         // then we can return the otherwise empty hit
         return hit;
     }
+
+    /*public LineRenderer ChooseLine()
+    {
+        if (powerupActive > 0)
+        {
+            return upgradedLine;
+        }
+        return 
+    }*/
 }

@@ -23,17 +23,31 @@ public class DestroyOnCollision : MonoBehaviour
 
     void OnCollisionEnter()
     {
-        GameObject ps = Instantiate(PS_Destroy, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
+        if (other.CompareTag("powerup"))
+        {
+            Destroy(other.gameObject);
+            Ship.GetComponent<ClickToShoot>().upgraded = true;
+            return;
+        }
+
+        if (other.CompareTag("terrain"))
+        {
+            GameObject ps = Instantiate(PS_Destroy, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionStay(Collision other)
     {
-        Destroy(gameObject);
+        if (other.collider.CompareTag("terrain"))
+        {
+            GameObject ps = Instantiate(PS_Destroy, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 }

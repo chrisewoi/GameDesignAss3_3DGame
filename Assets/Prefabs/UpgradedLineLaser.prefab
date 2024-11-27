@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2276221105634307418}
   - component: {fileID: 5832343994055126863}
   m_Layer: 0
-  m_Name: LineLaser
+  m_Name: UpgradedLineLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ LineRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 22bba853234316a46aa133c2fc345bd2, type: 2}
+  - {fileID: 2100000, guid: e4b80979e474d9a4cbf78e0bb20babbf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,11 +75,11 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -0.4, y: -0.28099966, z: 0.52299994}
-  - {x: 10.428664, y: 24.532543, z: 60.80439}
+  - {x: 0, y: 0, z: 0}
+  - {x: -28.777416, y: 3.111452, z: 61.608467}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.3
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -106,8 +106,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.1692376, b: 0, a: 0.78431374}
-      key1: {r: 1, g: 0.1692376, b: 0, a: 0.39215687}
+      key0: {r: 0.8708172, g: 0, b: 1, a: 0.78431374}
+      key1: {r: 0, g: 0.9457493, b: 1, a: 0.39215687}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
