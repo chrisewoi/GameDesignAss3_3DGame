@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public float decelRate;
     public float minForwardSpeed;
     public float maxForwardSpeed;
+    public float topSpeedReached;
+    
     // the speed of the ship between 0-1 relative to its min and max speed
     public float minMaxSpeed => Mathf.InverseLerp(minForwardSpeed, maxForwardSpeed, forwardSpeed);
 
@@ -49,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        if (rotationTarget == null) return;
+        if (forwardSpeed > topSpeedReached) topSpeedReached = forwardSpeed;
         moveInput.x = Input.GetAxis("Horizontal") * turnSpeed;
         float invertControlMultiplier = invertControls ? -1 : 1;
         moveInput.y = Input.GetAxis("Vertical") * turnSpeed * invertControlMultiplier;

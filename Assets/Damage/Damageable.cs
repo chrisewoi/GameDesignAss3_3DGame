@@ -14,6 +14,8 @@ namespace Damage
         private float healthCurrent;
         public GameObject destroyedPrefab;
 
+        public float pointsValue;
+
         private bool isDead;
         // Start is called before the first frame update
         void Start()
@@ -47,6 +49,7 @@ namespace Damage
         {
             isDead = true;
             healthCurrent = 0;
+            UIDisplay.Score += pointsValue;
             GameObject ps = Instantiate(destroyedPrefab, transform.position, Quaternion.identity);
             ps.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>().velocity);
             //onHealthZero.Invoke();
