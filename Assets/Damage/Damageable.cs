@@ -11,10 +11,12 @@ namespace Damage
         [SerializeField] private float healthMax;
         [SerializeField] private UnityEvent onHealthZero;
 
-        private float healthCurrent;
+        [SerializeField] private float healthCurrent;
         public GameObject destroyedPrefab;
 
         public float pointsValue;
+        public float timeValue;
+        private UIDisplay uiDisplay;
 
         private bool isDead;
         // Start is called before the first frame update
@@ -22,6 +24,7 @@ namespace Damage
         {
             healthCurrent = healthMax;
             isDead = false;
+            uiDisplay = FindObjectOfType<UIDisplay>();
         }
 
         public void TakeDamage(float amount)
@@ -50,6 +53,8 @@ namespace Damage
             isDead = true;
             healthCurrent = 0;
             UIDisplay.Score += pointsValue;
+            uiDisplay.AddTime(timeValue);
+            Debug.Log($"{name} HeathZero triggered");
             GameObject ps = Instantiate(destroyedPrefab, transform.position, Quaternion.identity);
             ps.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>().velocity);
             //onHealthZero.Invoke();

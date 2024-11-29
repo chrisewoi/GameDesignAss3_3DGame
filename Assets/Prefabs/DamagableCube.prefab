@@ -168,9 +168,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  healthCurrent: 0
   destroyedPrefab: {fileID: 8739433395031583436, guid: f53b5a10b2af2044a8c76f5226921ff2,
     type: 3}
   pointsValue: 100
+  timeValue: 0.5
 --- !u!1001 &2422449556304947985
 PrefabInstance:
   m_ObjectHideFlags: 0

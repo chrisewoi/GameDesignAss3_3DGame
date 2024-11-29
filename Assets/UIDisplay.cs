@@ -73,4 +73,10 @@ public class UIDisplay : MonoBehaviour
             
         }
     }
+
+    public void AddTime(float time)
+    {
+        timer += time;
+        Debug.Log($"{time} second added to timer");
+    }
 }

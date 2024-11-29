@@ -33,7 +33,7 @@ public class ClickToShoot : MonoBehaviour
     [Tooltip("The maximum distance this raycast can travel")] [SerializeField]
     private float maxDistance;
 
-    [SerializeField] public Camera camera;
+    [SerializeField] public new Camera camera;
     
     // protected = like private, but child scripts can see
     // virtual = lets a child script override this function with its own version
