@@ -11,6 +11,16 @@ public class ScoreTracking : MonoBehaviour
     public string[] fileNames = new string[] { "highscores.txt", "highscores2.txt" };
     string scoreFilePath = Directory.GetCurrentDirectory() + "/Assets/Saves/highscores.txt";
 
+    public ScoreTracking(string[] fileNameList) {
+        fileNames = fileNameList;
+    }
+
+    public ScoreTracking(string[] fileNameList, string filePath) {
+        fileNames = fileNameList;
+        scoreFilePath = filePath;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
