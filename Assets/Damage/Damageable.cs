@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Damage
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Damageable : MonoBehaviour
+    public class Damageable : RequiresUI
     {
         [SerializeField] private float healthMax;
         [SerializeField] private UnityEvent onHealthZero;
@@ -24,7 +24,7 @@ namespace Damage
         {
             healthCurrent = healthMax;
             isDead = false;
-            uiDisplay = FindObjectOfType<UIDisplay>();
+            uiDisplay = getUI();
         }
 
         public void TakeDamage(float amount)
