@@ -31,8 +31,17 @@ public class UIDisplay : MonoBehaviour
     public DestroyOnCollision ship;
     public PlayerMovement playerMovement;
     public float topSpeed;
-    
-    
+
+    public ScoreTracking scoreTracking;
+
+    public TMP_Text score1Text;
+    public TMP_Text score2Text;
+    public TMP_Text score3Text;
+    public TMP_Text score4Text;
+    public TMP_Text score5Text;
+
+    private bool hasSaved = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +52,7 @@ public class UIDisplay : MonoBehaviour
         GOPanel.SetActive(false);
         ship = FindObjectOfType<DestroyOnCollision>();
         playerMovement = GetComponent<PlayerMovement>();
+        scoreTracking = GetComponent<ScoreTracking>();
     }
 
     private void Awake()
@@ -68,8 +78,20 @@ public class UIDisplay : MonoBehaviour
             crosshair.gameObject.SetActive(false);
             topSpeedText.text = "Top Speed: " + topSpeed.ToString() + "KM/H";
             GOScore.text = Score.ToString();
+            float[] scoreList = scoreTracking.GetNewScoreList(Score);
+            if(scoreList.Length >=5) {
+                score1Text.text = scoreList[0].ToString();
+                score2Text.text = scoreList[1].ToString();
+                score3Text.text = scoreList[2].ToString();
+                score4Text.text = scoreList[3].ToString();
+                score5Text.text = scoreList[4].ToString();
+            }
+            if(!hasSaved) {
+                scoreTracking.SaveScores(scoreList);
+                hasSaved = true;
+            }
             //topSpeedText.text = "Top Speed: " + playerMovement.topSpeedReached.ToString();
-            if(ship != null) ship.DestroyShip();
+            if (ship != null) ship.DestroyShip();
             
         }
     }
