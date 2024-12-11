@@ -11,6 +11,9 @@ public class ScoreTracking : MonoBehaviour
     public string[] fileNames = new string[] { "highscores.txt", "highscores2.txt" };
     string scoreFilePath = Directory.GetCurrentDirectory() + "/Assets/Saves/highscores.txt";
 
+    public ScoreTracking() {
+
+    }
     public ScoreTracking(string[] fileNameList) {
         fileNames = fileNameList;
     }
