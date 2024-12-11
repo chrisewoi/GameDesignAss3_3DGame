@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class PowerupBar : MonoBehaviour
+public class PowerupBar : MonoBehaviour, IImage
 {
     public Image bar;
     public float fillAmount;

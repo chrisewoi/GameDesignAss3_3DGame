@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDisplay : MonoBehaviour
+public class UIDisplay : MonoBehaviour, IImage
 {
     public TMP_Text speedText;
     public PlayerMovement playerController;
@@ -100,5 +100,9 @@ public class UIDisplay : MonoBehaviour
     {
         timer += time;
         Debug.Log($"{time} second added to timer");
+    }
+
+    public void SetFill(float amount) {
+        crosshair.fillAmount = Mathf.Lerp(1, 1f, amount);
     }
 }
